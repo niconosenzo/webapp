@@ -4,6 +4,7 @@ The application is served locally at port 8080. Within the playbook execution th
 
 # Requirements
 * Docker.
+* Python3.
 * Pytest, should be available at `~/.local/bin/pytest`.
 * Port 8080 available.
 
