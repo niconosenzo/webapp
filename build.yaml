@@ -1,0 +1,40 @@
+---
+- name: Build, push and deploy container image from local Dockerfile
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: "Check if container is not running already"
+      command: ~/.local/bin/pytest
+      ignore_errors: yes
+      no_log: true
+      register: test_result
+    - block:
+        - name: "End playbook if container is already running"
+          debug:
+            msg: "Aborting, localhost:8080/sample is already serving"
+        - meta: end_play
+      when: test_result.stdout.find('failed') == -1
+
+    - name: Build the image
+      command: docker build -t webapp .
+
+    - name: "tag the image"
+      command: docker tag webapp quay.io/nnosenzo/webapp:latest
+
+    - name: "push to quay registry to store it permanently"
+      command: docker push quay.io/nnosenzo/webapp:latest
+
+    - name: "Run container"
+      command: docker run -d -p 8080:8080 quay.io/nnosenzo/webapp:latest
+
+    #  Pause for some seconds until the container is up and running
+    - pause: seconds=4
+
+    - name: "Test image once running"
+      command: ~/.local/bin/pytest
+      register: testoutput
+      
+    - name: Print test result
+      debug:
+        msg: "Test Result: {{ testoutput.stdout }}"
