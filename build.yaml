@@ -4,6 +4,18 @@
   connection: local
 
   tasks:
+    - name: Check if pytest is installed
+      stat:
+        path: ~/.local/bin/pytest
+      register: stat_result
+
+    - block:
+        - name: "If pytest couldn't be found, exit"
+          debug:
+            msg: "Please make sure ~/.local/bin/pytest is available"
+        - meta: end_play
+      when: not stat_result.stat.exists
+
     - name: "Check if container is not running already"
       command: ~/.local/bin/pytest
       ignore_errors: yes
