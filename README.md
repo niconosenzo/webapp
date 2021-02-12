@@ -9,8 +9,7 @@ The application is served locally at port 8080. Within the playbook execution th
 
 # Steps
 * git clone https://github.com/niconosenzo/webapp.git
-* cd webapp/
-* Execute `ansible-playbook build.yaml
+* `cd webapp/; ansible-playbook build.yaml`
 
 # NOTE
 * Playbook must be run as root (it makes use of the Docker socket)
