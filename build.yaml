@@ -27,13 +27,13 @@
         - meta: end_play
       when: test_result.stdout.find('failed') == -1
 
-    - name: Build the image
+    - name: "Build the image"
       command: docker build -t webapp .
 
-    - name: "tag the image"
+    - name: "Tag the image"
       command: docker tag webapp quay.io/nnosenzo/webapp:latest
 
-    - name: "push to quay registry to store it permanently"
+    - name: "Push to quay registry to store it permanently"
       command: docker push quay.io/nnosenzo/webapp:latest
 
     - name: "Run container"
@@ -46,6 +46,6 @@
       command: ~/.local/bin/pytest
       register: testoutput
       
-    - name: Print test result
+    - name: Print test results
       debug:
         msg: "Test Result: {{ testoutput.stdout }}"
