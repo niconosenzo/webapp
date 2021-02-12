@@ -14,6 +14,7 @@
         msg: "Please make sure ~/.local/bin/pytest is available"
       when: not stat_result.stat.exists
 
+    # task will fail if container is not running, but it will continue with the execution.  
     - name: "Check if container is not running already"
       command: ~/.local/bin/pytest
       ignore_errors: yes
